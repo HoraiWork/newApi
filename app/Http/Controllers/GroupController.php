@@ -4,17 +4,21 @@ namespace App\Http\Controllers;
 
 use App\Groups;
 use Illuminate\Http\Request;
+use JWTAuth;
 
 class GroupController extends Controller
 {
+    protected $user;
+
+    public function __construct()
+    {
+        $this->user = JWTAuth::parseToken()->authenticate();
+    }
     public function index()
     {
-        $group = Groups::where('group_id', '=', 63)
-        ->get();
-
-        $this->group = $group;
-        var_dump([
-            'id' => $this->group
-        ]);
+        return $this->user
+            ->products()
+            ->get(['name', 'price', 'quantity'])
+            ->toArray();
     }
 }

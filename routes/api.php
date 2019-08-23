@@ -20,9 +20,19 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 $api = app('Dingo\Api\Routing\Router');
 
-$api->version('v1', function ($api) {
-    $api->get('groups', 'App\Api\Controllers\GroupController@index');
+$api->version('v1',['middleware' => 'api_token'] ,function ($api) {
+    $api->get('groups/', 'App\Api\Controllers\GroupController@index');
+    $api->get('groups/{id}', 'App\Api\Controllers\GroupController@show');
+    $api->get('groups/{lang}/{id}', 'App\Api\Controllers\GroupController@showTranslate');
+
 });
+
+
+//Route::get('/example/{api_token}/{name}', function (Request $request) {
+//    return response()->json([
+//        'name' => $request->name,
+//    ]);
+//})->middleware('api_token');
 
 
 //$api->get('groups', 'Api\Controllers\GroupController@show');
